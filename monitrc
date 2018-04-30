@@ -181,9 +181,8 @@ set httpd port 2812 and
  
 #Check Unix Shell Script output
  check program myscript with path /Users/Harish/Developer/myscript.sh
-   if status == 1 then alert
-   if status == 2 then restarts
-
+   if output > 97 then alert
+ 
 
 # Spring	
 	check process springboot with pidfile /Users/Harish/Developer/Application.pid
