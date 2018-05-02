@@ -76,7 +76,7 @@ set log /Users/Harish/Developer/hck.log
 ## specified using a comma separator. If the first mail server fails, Monit
 # will use the second mail server in the list and so on. By default Monit uses
 # port 25 - it is possible to override this with the PORT option.
-#
+#https://mmonit.com/wiki/Monit/Gmail   #
 set mailserver smtp.gmail.com port 587
     username "test@gmail.com" password "dzone"
     using ssl
@@ -175,20 +175,20 @@ set httpd port 2812 and
   
 
 
-#check file error_log with url http http://localhost:8983/solr/admin/info/system?_=1522699861049&wt=json
- #   if match 'free=380' then exec 'echo hello'
 
- 
 #Check Unix Shell Script output
- check program myscript with path /Users/Harish/Developer/myscript.sh
-   if output > 97 then alert
+ check program HealthCheck with path /Users/Harish/Developer/myscript.sh
+  if status > 0 then alert
+  if status > 0 for 3 cycles then alert
+  if status > 0 for 5 cycles then restart
  
 
 # Spring	
 	check process springboot with pidfile /Users/Harish/Developer/Application.pid
  	start program = "/Users/Harish/Developer/startboot.sh"
 	if failed host 127.0.0.1 port 8080 then restart
-	if 5 restarts within 5 cycles then timeout
+	if 3 restarts within 5 cycles then alert
+        if 5 restarts within 5 cycles then timeout
 
   # Solr
     check process solr with pidfile /Users/Harish/Software/solr_zk/solr1/solr-7.2.1/bin/solr-8983.pid
@@ -205,5 +205,7 @@ set httpd port 2812 and
 	 if space usage > 90% for 5 cycles then
 	    exec '/Users/Harish/Developer/myscript.sh'
 	 if space usage > 99% then exec '/Users/Harish/Developer/myscript.sh'
-
- #https://mmonit.com/wiki/Monit/Gmail   
+	 
+#check Directory Permission
+  check directory Developer with path /Users/Harish/Developer/
+    if failed permission 755 then alert  
